@@ -17,19 +17,19 @@ export default {
     return {
       bid: 0,
       loading: true,
-    };
+    }
   },
   created() {
     this.fetchData()
   },
   methods: {
     fetchData() {
-      // this.loading = true // 여기서 해야할까?
+      this.loading = true // 여기서 해야할까?
       setTimeout(() => {
         this.bid = this.$route.params.bid
         this.loading = false
       }, 500)
-    }
-  }
-};
+    },
+  },
+}
 </script>
