@@ -5,8 +5,9 @@
       Board List:
       <div v-if="loading">Loading...</div>
       <div v-else>
-        Api result:
-        <pre>{{ apiRes }}</pre>
+        <div v-for="b in boards" :key="b.id">
+          {{ b }}
+        </div>
         <div v-if="error">
           <pre>{{ error }}</pre>
         </div>
@@ -26,7 +27,7 @@ export default {
     return {
       loading: true,
       apiRes: "",
-      error: "",
+      // error: "",
     }
   },
   created() {
@@ -37,12 +38,14 @@ export default {
       this.loading = true
 
       axios
-        .get("http://localhost:3000/h1ealth") // axios는 promise를 반환해서 바로 then chain을 사용할 수 있다
+        .get("http://localhost:3000/boards") // axios는 promise를 반환해서 바로 then chain을 사용할 수 있다
         .then((res) => {
           this.apiRes = res.data
         })
         .catch((res) => {
-          this.error = res.response.data
+          // this.error = res.response.data
+          // this.$router vue-router를 뜻함..
+          this.$router.replace("/login")
         })
         .finally(() => {
           this.loading = false
