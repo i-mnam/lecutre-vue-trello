@@ -13,9 +13,13 @@ Vue.use(VueRouter)
 
 const requireAuth = (to, from, next) => {
     const isAuth = localStorage.getItem('token')
+    console.log(`to = ${to.path}, from = ${from.path}, localStorage.token = ${localStorage.token}`)
     //!!!! 이전 url을 호출해서 401(UnAuthorized)를 확인하지 않고 바로 처리 가능 > 확인 대상을 토큰 저장 여부로 로직 변경
     // query string 은 encoding(ASCI 문자열로 변환) 해줘야 하는 것!
     const loginPath = `/login?rPath=${encodeURIComponent(to.path)}`
+    console.log('roeuter index.js requireAuth =', loginPath)
+    const temp = (isAuth) ? 't': 'f'
+    console.log('isAuth?', temp)
     isAuth ? next() : next(loginPath) // true : routing 로직을 계속 수행
 }
 
@@ -29,7 +33,7 @@ const router = new VueRouter({
         { path: '/login', component: Login },
         {
             path: '/b/:bid', component: Board, beforeEnter: requireAuth, children: [
-                { path: 'c/:cid', component: Card ,beforeEnter: requireAuth }
+                { path: 'c/:cid', component: Card }
             ]
         },
         { path: '/*', component: NotFound },

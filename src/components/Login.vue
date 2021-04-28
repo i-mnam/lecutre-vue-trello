@@ -16,12 +16,15 @@
   </div>
 </template>
 <script>
+import {auth, setAuthInHeader} from '../api'
+
 export default {
   data() {
     return {
       email: '',
       password: '',
       error: '',
+      rPath: '',
     }
   },
   computed: {
@@ -29,9 +32,29 @@ export default {
       return !this.email || !this.password
     }
   },
+  created() {
+    console.log('Login created()')
+    // vue.$route 에서 query 정보를 조회해서 온다.
+    this.rPath = this.$route.query.rPath || '/' // 여기서 this.rPath 초기화
+  },
   methods: {
     onSubmit() {
       console.log('onSubmit() =', this.email, this.password)
+      auth.login(this.email, this.password)
+        .then(data => {
+          console.log('success data =', data)
+          console.log('이게 정상이라는 거잖아')
+          localStorage.setItem('token', data.accessToken)
+          setAuthInHeader(data.accessToken)
+
+          // vue.$router 를 통해서 redirect 정보를 설정해준다.
+          this.$router.push(this.rPath)
+        })
+        .catch(err => {
+          console.log('catch err =', err)
+          this.error = err.data.error
+        })
+
     }
   }
 };

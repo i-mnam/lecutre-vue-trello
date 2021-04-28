@@ -8,9 +8,6 @@
         <div v-for="b in boards" :key="b.id">
           {{ b }}
         </div>
-        <div v-if="error">
-          <pre>{{ error }}</pre>
-        </div>
       </div>
       <ul>
         <li><router-link to="/b/1">Board 1</router-link></li>
@@ -21,7 +18,7 @@
 </template>
 <script>
 // import axios from "axios"
-import board from '../api'
+import {board} from '../api' // 객체를 import
 
 
 export default {
@@ -33,6 +30,7 @@ export default {
     }
   },
   created() {
+    console.log('Home created()')
     this.fetchData()
   },
   methods: {
