@@ -26,7 +26,6 @@ export default {
   },
   computed: {
     invalidForm() {
-      console.log('invalidForm =', !this.email || !this.password)
       return !this.email || !this.password
     }
   },

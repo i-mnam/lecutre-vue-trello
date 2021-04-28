@@ -20,13 +20,15 @@
   </div>
 </template>
 <script>
-import axios from "axios"
+// import axios from "axios"
+import board from '../api'
+
 
 export default {
   data() {
     return {
       loading: true,
-      apiRes: "",
+      boards: '',
       // error: "",
     }
   },
@@ -37,19 +39,32 @@ export default {
     fetchData() {
       this.loading = true
 
-      axios
-        .get("http://localhost:3000/boards") // axios는 promise를 반환해서 바로 then chain을 사용할 수 있다
-        .then((res) => {
-          this.apiRes = res.data
+      board.fetch()
+        .then(data => {
+          this.boards = data
         })
-        .catch((res) => {
-          // this.error = res.response.data
-          // this.$router vue-router를 뜻함..
-          this.$router.replace("/login")
-        })
+        // .catch() << 사용 안하는 이유 : 공통 처리 중 @../api/index.js
         .finally(() => {
           this.loading = false
         })
+
+
+      //** axios library 직접적으로 사용한 것 **//
+      // axios
+      //   .get("http://localhost:3000/boards") // axios는 promise를 반환해서 바로 then chain을 사용할 수 있다
+      //   .then((res) => {
+      //     this.apiRes = res.data
+      //   })
+      //   .catch((res) => {
+      //     // this.error = res.response.data
+      //     // this.$router vue-router를 뜻함..
+      //     this.$router.replace("/login")
+      //   })
+      //   .finally(() => {
+      //     this.loading = false
+      //   })
+
+
 
       //** XMLHttpRequest 객체 사용한 것 **//
       // const req = new XMLHttpRequest()
