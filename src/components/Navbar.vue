@@ -15,7 +15,11 @@ import { setAuthInHeader } from "../api"
 
 export default {
   computed: {
+    // browser routing 은 정말 데이터만 호출..
+    // 대상이 아닌 element는 호출대상도 아니여서 그대로 유지
+    // computed 는 값의 변화를 감지하는 줄 알았는데 아니였어..
     isAuth() {
+      console.log("Navbar isAuth = ", !!localStorage.getItem("token"))
       return !!localStorage.getItem("token")
     },
   },
@@ -23,7 +27,7 @@ export default {
     logout() {
       delete localStorage.token
       setAuthInHeader(null)
-      this.$router.push("push")
+      this.$router.push("/login")
     },
   },
 }
