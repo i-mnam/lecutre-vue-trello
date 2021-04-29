@@ -63,7 +63,11 @@ export const board = {
     fetch() {// 내맘 대로 명명
         console.log('api index.js board-object fetch()')
         return request('get', '/boards')
-    }
+    },
+    create(title) {
+        console.log('api index.js board-object create() title =', title)
+        return request('post', '/boards', {title})
+    },
 }
 
 export const auth = {

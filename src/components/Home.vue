@@ -9,22 +9,32 @@
       </div>
       <div class="board-item board-item-new">
         <a class="new-board-btn" href="" @click.prevent="addBoard">
+          <!-- vue event 등록할 때, parameter 존재 유무를 알 수가 없다. -->
           Create new board...
         </a>
       </div>
     </div>
+    
+    <!-- <Modal></Modal> -->
+    <AddBoard v-if="isAddBoard" v-on:@close="isAddBoard=false" v-on:@submit="onAddBoard" />
   </div>
 </template>
 <script>
 // import axios from "axios"
 import {board} from '../api' // 객체를 import
+// import Modal from './Modal.vue'
+import AddBoard from './AddBoard.vue'
 
 export default {
+  components: {
+    // Modal,
+    AddBoard,
+  },
   data() {
     return {
       loading: true,
       boards: [],
-
+      isAddBoard: false,
     }
   },
   created() {
@@ -87,7 +97,15 @@ export default {
       // })
     },
     addBoard() {
-      console.log('addBoard()')
+      console.log('Home - addBoard()')
+      this.isAddBoard = true
+    },
+    onAddBoard(title) {
+      console.log('Home - onAddBoard() =', title);
+      board.create(title)
+        .then(() => {
+          this.fetchData()
+        })
     }
   },
 }
