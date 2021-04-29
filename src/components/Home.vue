@@ -1,18 +1,17 @@
 <template>
   <div>
-    Home
-    <div>
-      Board List:
-      <div v-if="loading">Loading...</div>
-      <div v-else>
-        <div v-for="b in boards" :key="b.id">
-          {{ b }}
-        </div>
+    <div class="home-title">Personal Boards</div>
+    <div class="board-list" ref="boardList">
+      <div class="board-item" v-for="b in boards" :key="b.id" :data-bgcolor="b.bgColor" ref="boardItem">
+        <router-link :to="`/b/${b.id}`">
+          <div class="board-item-title">{{b.title}}</div>
+        </router-link>
       </div>
-      <ul>
-        <li><router-link to="/b/1">Board 1</router-link></li>
-        <li><router-link to="/b/2">Board 2</router-link></li>
-      </ul>
+      <div class="board-item board-item-new">
+        <a class="new-board-btn" href="" @click.prevent="addBoard">
+          Create new board...
+        </a>
+      </div>
     </div>
   </div>
 </template>
@@ -20,18 +19,29 @@
 // import axios from "axios"
 import {board} from '../api' // 객체를 import
 
-
 export default {
   data() {
     return {
       loading: true,
-      boards: '',
-      // error: "",
+      boards: [],
+
     }
   },
   created() {
     console.log('Home created()')
     this.fetchData()
+  },
+  // vue.js의 렌더링 사이클에 의해서 updated()는 매번 호출 됨.
+  // created() 다음에 호출이 됨
+  // data의 값에 변화가 감지되면 updated hook이 발동됨.
+//   가상 DOM을 렌더링 하고 실제 DOM이 변경된 이후에 호출되는 updated훅입니다. 변경된 data가 DOM에도 적용된 상태입니다. 
+// 만약 변경된 값들을 DOM을 이용해 접근하고 싶다면, updated훅이 가장 적절합니다.
+// 다만 이 훅에서 data를 변경하는 것은 무한 루프를 일으킬 수 있으므로 이 훅에서는 데이터를 직접 바꾸어서는 안됩니다.
+  updated() {
+    console.log('updated() this.$refs.boardItem =', this.$refs.boardItem)
+    this.$refs.boardItem.forEach(el => {
+      el.style.backgroundColor = el.dataset.bgcolor
+    })
   },
   methods: {
     fetchData() {
@@ -39,7 +49,8 @@ export default {
 
       board.fetch()
         .then(data => {
-          this.boards = data
+          console.log('Home fetch() data =', data)
+          this.boards = data.list
         })
         // .catch() << 사용 안하는 이유 : 공통 처리 중 @../api/index.js
         .finally(() => {
@@ -62,15 +73,10 @@ export default {
       //     this.loading = false
       //   })
 
-
-
       //** XMLHttpRequest 객체 사용한 것 **//
       // const req = new XMLHttpRequest()
-
       // req.open("GET", "http://localhost:3000/health")
-
       // req.send()
-
       // req.addEventListener("load", () => {
       //   this.loading = false
       //   this.apiRes = {
@@ -80,6 +86,56 @@ export default {
       //   }
       // })
     },
+    addBoard() {
+      console.log('addBoard()')
+    }
   },
 }
 </script>
+<style scoped>
+.home-title {
+  padding: 10px;
+  font-size: 18px;
+  font-weight: bold;
+}
+.board-list {
+  padding: 10px;
+  display: flex;
+  flex-wrap: wrap;
+}
+.board-item {
+  width: 23%;
+  height: 100px;
+  margin: 0 2% 20px 0;
+  border-radius: 3px;
+}
+.board-item-new {
+  background-color: #ddd;
+}
+.board-item a {
+  text-decoration: none;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.board-item a:hover,
+.board-item a:focus {
+  background-color: rgba(0,0,0, .1);
+  color: #666;
+}
+.board-item-title {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  padding: 10px;
+}
+.board-item a.new-board-btn {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  height: 100px;
+  width: inherit;
+  color: #888;
+  font-weight: 700;
+}
+</style>

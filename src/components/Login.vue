@@ -51,7 +51,7 @@ export default {
           this.$router.push(this.rPath)
         })
         .catch(err => {
-          console.log('catch err =', err)
+          // console.log('catch err =', err)
           this.error = err.data.error
         })
 

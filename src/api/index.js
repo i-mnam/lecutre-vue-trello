@@ -32,12 +32,12 @@ const request = (method, url, data) => {
     // }
     )
     .catch(result => {
-        console.log('api(axios) index.js request() catch event!! data =', result)
+        // console.log('api(axios) index.js request() catch event!! data =', result)
         const {status} = result.response // response status code 가져오는 부분
         // if (status === UNAUTHORIZED) return onUnauthorized()
         if (status === UNAUTHORIZED) onUnauthorized()
         // return 함수.. 씨..
-        console.log('here... ????????????????????????')
+        // console.log('here... ????????????????????????')
         // throw Error(result) 
         // if (status === UNAUTHORIZED) onUnauthorized()
         // console.log('!!!')
