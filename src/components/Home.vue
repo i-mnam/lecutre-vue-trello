@@ -14,7 +14,12 @@
         </router-link>
       </div>
       <div class="board-item board-item-new">
-        <a class="new-board-btn" href="" @click.prevent="addBoard">
+        <!-- <a class="new-board-btn" href="" @click.prevent="addBoard"> -->
+        <a
+          class="new-board-btn"
+          href=""
+          @click.prevent="SET_IS_ADD_BOARD(true)"
+        >
           <!-- vue event 등록할 때, parameter 존재 유무를 알 수가 없다. -->
           Create new board...
         </a>
@@ -22,9 +27,10 @@
     </div>
 
     <!-- <Modal></Modal> -->
+    <!-- <AddBoard v-if="isAddBoard" v-on:@close="isAddBoard = false" v-on:@submit="onAddBoard" /> -->
     <AddBoard
       v-if="isAddBoard"
-      v-on:@close="isAddBoard = false"
+      v-on:@close="SET_IS_ADD_BOARD(false)"
       v-on:@submit="onAddBoard"
     />
   </div>
@@ -34,7 +40,7 @@
 import { board } from "../api" // 객체를 import
 // import Modal from './Modal.vue'
 import AddBoard from "./AddBoard.vue"
-import { mapState } from "vuex" // MapState라는 함수를 가져옴
+import { mapMutations, mapState } from "vuex" // MapState라는 함수를 가져옴
 
 export default {
   components: {
@@ -82,6 +88,7 @@ export default {
     })
   },
   methods: {
+    ...mapMutations(["SET_IS_ADD_BOARD"]),
     fetchData() {
       this.loading = true
 
@@ -124,10 +131,11 @@ export default {
       //   }
       // })
     },
-    addBoard() {
-      console.log("Home - addBoard()")
-      this.isAddBoard = true
-    },
+    // 1. vuex-mutation
+    // addBoard() {
+    //   // this.isAddBoard = true
+    //   this.$store.commit("SET_IS_ADD_BOARD", true)
+    // },
     onAddBoard(title) {
       console.log("Home - onAddBoard() =", title)
       board.create(title).then(() => {
