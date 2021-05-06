@@ -33,7 +33,7 @@
 <script>
 import { map } from "@amcharts/amcharts4/.internal/core/utils/Array"
 import Modal from "./Modal.vue"
-import { mapMutations } from "vuex"
+import { mapMutations, mapActions } from "vuex"
 
 export default {
   components: {
@@ -62,11 +62,18 @@ export default {
     // close() {
     //     this.$emit('close')
     // },
+    ...mapActions(["ADD_BOARD"]),
+
     addBoard() {
       console.log("AddBoard - addBoard() input =", this.input)
       // this.$emit('@close')
       this.SET_IS_ADD_BOARD(false)
-      this.$emit("@submit", this.input)
+      // this.$emit("@submit", this.input)
+      this.$emit("@submit")
+      // this.$store.dispatch("ADD_BOARD", { title: this.input })
+
+      // mapActions 핼퍼 사용
+      this.ADD_BOARD({ title: this.input })
     },
   },
 }
