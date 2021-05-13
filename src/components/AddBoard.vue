@@ -62,18 +62,20 @@ export default {
     // close() {
     //     this.$emit('close')
     // },
-    ...mapActions(["ADD_BOARD"]),
+    ...mapActions(["ADD_BOARD", "FETCH_BOARDS"]),
 
     addBoard() {
       console.log("AddBoard - addBoard() input =", this.input)
       // this.$emit('@close')
       this.SET_IS_ADD_BOARD(false)
       // this.$emit("@submit", this.input)
-      this.$emit("@submit")
+      // this.$emit("@submit") // mapActions 으로 대체
       // this.$store.dispatch("ADD_BOARD", { title: this.input })
 
       // mapActions 핼퍼 사용
-      this.ADD_BOARD({ title: this.input })
+      this.ADD_BOARD({ title: this.input }).then(() => {
+        this.FETCH_BOARDS()
+      })
     },
   },
 }

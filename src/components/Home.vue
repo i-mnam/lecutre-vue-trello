@@ -31,8 +31,9 @@
     <AddBoard
       v-if="isAddBoard"
       v-on:@close="SET_IS_ADD_BOARD(false)"
-      v-on:@submit="onAddBoard"
+      
     />
+    <!-- v-on:@submit="onAddBoard" -->
   </div>
 </template>
 <script>
@@ -40,7 +41,7 @@
 import { board } from "../api" // 객체를 import
 // import Modal from './Modal.vue'
 import AddBoard from "./AddBoard.vue"
-import { mapMutations, mapState } from "vuex" // MapState라는 함수를 가져옴
+import { mapMutations, mapState, mapActions } from "vuex" // MapState라는 함수를 가져옴
 
 export default {
   components: {
@@ -50,7 +51,7 @@ export default {
   data() {
     return {
       loading: true,
-      boards: [],
+      // boards: [],
       // isAddBoard: false,
     }
   },
@@ -66,7 +67,11 @@ export default {
     // mapState(["isAddBoard"]),
     // 3.
     {
-      ...mapState(["isAddBoard"]),
+      // ...mapState(["isAddBoard"]),
+      ...mapState({
+        isAddBoard: 'isAddBoard',
+        boards: 'boards',
+      }),
       foo() {
         // something..
       },
@@ -89,19 +94,23 @@ export default {
   },
   methods: {
     ...mapMutations(["SET_IS_ADD_BOARD"]),
+    ...mapActions(['FETCH_BOARDS']),
     fetchData() {
       this.loading = true
 
-      board
-        .fetch()
-        .then((data) => {
-          console.log("Home fetch() data =", data)
-          this.boards = data.list
-        })
-        // .catch() << 사용 안하는 이유 : 공통 처리 중 @../api/index.js
-        .finally(() => {
-          this.loading = false
-        })
+      this.FETCH_BOARDS().finally(_ => {
+        this.loading = false
+      })
+      // board
+      //   .fetch()
+      //   .then((data) => {
+      //     console.log("Home fetch() data =", data)
+      //     this.boards = data.list
+      //   })
+      //   // .catch() << 사용 안하는 이유 : 공통 처리 중 @../api/index.js
+      //   .finally(() => {
+      //     this.loading = false
+      //   })
 
       //** axios library 직접적으로 사용한 것 **//
       // axios
@@ -142,9 +151,9 @@ export default {
     //     this.fetchData()
     //   })
     // },
-    onAddBoard() {
-      this.fetchData()
-    },
+    // onAddBoard() {
+    //   this.fetchData()
+    // },
   },
 }
 </script>
