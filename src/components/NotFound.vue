@@ -1,17 +1,6 @@
 <template>
-  <div>
-    Page Not Found
-    <hr />
-    <am-chart-sample />
-
-  </div>
+  <div>NotFound</div>
 </template>
 <script>
-import AmChartSample from './AmChartSample.vue'
-
-export default {
-  components: {
-    AmChartSample,
-  }
-}
+export default {}
 </script>
