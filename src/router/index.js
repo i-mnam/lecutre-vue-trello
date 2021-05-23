@@ -26,17 +26,27 @@ const router = new VueRouter({
     mode: 'history',
 
     routes: [
-        { path: '/', component: Home, beforeEnter: requireAuth },
-        { path: '/login', component: Login },
+        {
+            path: '/',
+            component: Home,
+            beforeEnter: requireAuth
+        },
+        {
+            path: '/login',
+            component: Login
+        },
         // { path: '/b/:bid', component: Board }, // 동적 라우트 매칭
         // 중첩 라우트
-        { 
-            path: '/b/:bid', component: Board, beforeEnter: requireAuth
-            , children: [
-                {path: 'c/:cid', component: Card, beforeEnter: requireAuth }
-            ]
-        }, 
-        { path: '/*', component: NotFound },
+        {
+            path: '/b/:bid',
+            component: Board,
+            beforeEnter: requireAuth,
+            children: [{ path: 'c/:cid', component: Card }]
+        },
+        {
+            path: '*',
+            component: NotFound
+        },
     ]
 
 })

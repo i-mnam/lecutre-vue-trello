@@ -40,8 +40,9 @@ export const setAuthInHeader = token => {
 
 export const board = {
     // board에서 조회해올 api용이니까 fetch()라고 이름 지음
-    fetch() {
-        return request('get', '/boards')
+    // fetch() {return request('get', '/boards')},
+    fetch(id) {
+        return id ? request('get', `/boards/${id}`) : request('get', '/boards')
     },
     create(title) {
         return request('post', '/boards', { title })
