@@ -28,6 +28,7 @@ const store = new Vuex.Store({
             state.boards = boards
         },
         LOGIN (state, token) {
+            console.log('언제 mutation이고, 언제 action일까')
             if (!token) {
                 console.log('vuex store.js mutation LOGIN() token 없어.')
                 return

@@ -57,6 +57,10 @@ export const setAuthInHeader = token => {
     axios.defaults.headers.common['Authorization'] = token ? `Bearer ${token}` : null
 }
 
+// 원래 있었던 코드인데 내가 몰랐던 거 > Vuex에서 app로딩 직후 header 설정하는 로직 있어서 삭제되는 부분
+// const {token} = localStorage
+// if (token) setAuthInHeader(token)
+
 // 이 모듈을 사용하기 위해 api 호출 객체를 export를 해야함
 // Board 에서는 현재 조회하는 부분 만 있으므로
 export const board = {

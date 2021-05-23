@@ -53,6 +53,7 @@ export default {
     },
   },
   mounted() {
+    // AddBoard가 부모 컴포넌트에 마운트 되엇을 때, 실행되는
     this.$refs.input.focus()
   },
   methods: {
