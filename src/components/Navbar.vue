@@ -11,20 +11,31 @@
 </template>
 
 <script>
-import { setAuthInHeader } from '../api'
+// import { setAuthInHeader } from '../api'
+import {mapGetters, mapMutations} from 'vuex'
+
 export default {
     computed: {
-        isAuth() {
-            // js값을 불리언 타입으로 변경할때 많이 사용 / 비슷 Boolean()
-            return !!localStorage.getItem('token')
-        }
+      // **store (getter 사용하는 부분 주의! 이렇게 호출만 해둬도 템플릿에서 변수처럼 사용 가능)
+      // isAuth() {
+      //     // js값을 불리언 타입으로 변경할때 많이 사용 / 비슷 Boolean()
+      //     return !!localStorage.getItem('token')
+      // }
+      ...mapGetters(['isAuth']),
+      
+      aa() {
+        console.log('호출 template가 없으면 사용 안해', this.isAuth)
+      },
     },
     methods: {
-        logout() {
-            delete localStorage.token
-            setAuthInHeader(null)
-            this.$router.push('/login')
-        }
+      // 언제 mutaition인지, action인지 헷갈린다. 주의!!!
+      ...mapMutations(['LOGOUT']),
+      logout() {
+          // delete localStorage.token
+          // setAuthInHeader(null)
+          this.LOGOUT()
+          this.$router.push('/login')
+      }
     }
 }
 </script>

@@ -16,16 +16,15 @@
       </div>
     </div>
     
-    <AddBoard v-if="isAddBoard" @close="isAddBoard=false" @submit="onAddBoard"/>
-<!-- 
-    <AddbBoard @close="isAddBoard=false" @submit="onAddBoard" /> -->
+    <AddBoard v-if="isAddBoard" @close="isAddBoard=false"/> <!-- @submit="onAddBoard" -->
+<!-- <AddbBoard @close="isAddBoard=false" @submit="onAddBoard" /> -->
   </div>
 </template>
 <script>
 // import axios from 'axios'
 import {board} from '../api'
 import AddBoard from './AddBoard.vue'
-import {mapState, mapMutations, } from 'vuex'
+import {mapState, mapMutations, mapActions } from 'vuex'
 
 export default {
   components: {
@@ -34,19 +33,20 @@ export default {
   computed: {
     // **store의 mapState 변경
     // isAddBoard() { return this.$store.state.isAddBoard }
-    ...mapState([
-      'isAddBoard'
-    ]), // ...mapState({ isAddBoard: 'isAddBoard', })
+    // ...mapState({ isAddBoard: 'isAddBoard', })
+    ...mapState(['isAddBoard', 'boards']),
   },
   data() {
     return {
       loading: true,
       error: '',
-      boards: [],
+      // **store에서 처리
+      // boards: [],
       // isAddBoard: false,
     }
   },
   created() {
+    // console.log('Vue instance 확인 @Home', this) // VueComponent 객체로 인식하고 있음
     this.fetchData()
   },
   // vue.js의 렌더링 사이클에 의해서 updated()는 매번 호출 됨.
@@ -64,29 +64,35 @@ export default {
   methods: {
     // 동기적인 코드만 변이 가능하므로, 상태 변경 데이터 변경과 같은 것 위주
     ...mapMutations(['SET_IS_ADD_BOARD']),
+    ...mapActions(['FETCH_BOARDS']),
     fetchData() {
       this.loading = true
-      board.fetch()
-        .then(data => {
-          this.boards = data.list
-        })
-        .catch(res => {
-          console.log('Home error res =', res)
-        })
-        .finally(_ => {
-          this.loading = false
-        })
+      // **store에서 처리
+      // board.fetch()
+      //   .then(data => {
+      //     this.boards = data.list
+      //   })
+      //   .catch(res => {
+      //     console.log('Home error res =', res)
+      //   })
+      //   .finally(_ => {
+      //     this.loading = false
+      //   })
+      this.FETCH_BOARDS().finally(_ => {
+        this.loading = false
+      })
     },
     // **store의 mapMutations 변경
     // addBoard() {
     //   // this.isAddBoard = true
     //   this.$store.commit('SET_IS_ADD_BOARD', true)
     // },
-    onAddBoard(input) {
-      console.log('onAddBoard input = ', input)
-      board.create(input)
-        .then(() => { this.fetchData() })
-    }
+    // onAddBoard(input) {
+    //   // **store의 mapActions 변경
+    //   // board.create(input)
+    //   //   .then(() => { this.fetchData() })
+    //   this.fetchData()
+    // }
   }
 }
 </script>

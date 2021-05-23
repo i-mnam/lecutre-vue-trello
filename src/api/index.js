@@ -54,7 +54,10 @@ export const auth = {
     }
 }
 
-const {token} = localStorage // const token = localStorage.token?
-if (token) {
-    setAuthInHeader(token)
-}
+// **store 로딩시 토큰 확인하는 로직 구현해서 이 부분 필요 없어짐
+// 새로고침하면 로그인 풀리는 현상 방지
+// const token = localStorage.token?
+// const {token} = localStorage 
+// if (token) {
+//     setAuthInHeader(token)
+// }
