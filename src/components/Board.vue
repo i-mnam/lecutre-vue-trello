@@ -8,7 +8,7 @@
       <router-link :to="`/b/${bid}/c/2`">Card 2</router-link>
     </div>
 <!-- 
-Q) router-link에서 to와 :to 의 차이가 궁금
+Q) router-link에서 prop(속성) to와 :to 의 차이가 궁금
 A) Vuejs의 데이터 바인딩 기능
 to="/b/1" 으로 선언했을때는 링크가 /b/1으로만 설정되는 반면에
 :to=/b/${bid}/c/1 로 선언하게되면 bid 변수 값에 따라 링크가 동적으로 변하는 것 -->
