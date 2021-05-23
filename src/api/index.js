@@ -9,8 +9,10 @@ const onUnauthorized = () => {
     // <router-link :to="{ name: 'user', params: { userId: 123 }}">User</router-link>
     // /user/123 경로로 이동
 
-    console.log('api onUnauthorized() 실행됨')
-    router.push('/login')
+    // router.push('/login')
+    // .catch(err=>{console.log('onUnauthorized() err(NavigationDuplicated: Avoided redundant navigation to current location: "/login".)...', err)})
+    router.push(`/login?rPath=${encodeURIComponent(location.pathname)}`)
+
 }
 
 // api 호출 부분 모듈화
@@ -22,13 +24,18 @@ const request = (method, url, data) => {
     })
     .then(result => result.data)
     .catch(result => {
-        console.log('result.response=', result.response.data)
         const {status} = result.response
-        if (status === UNAUTHORIZED) onUnauthorized()
-        console.log('...여기 지나가지?? 1')
+        if (status === UNAUTHORIZED) {
+            onUnauthorized()
+        }
         // throw Error() 중요!! throw 안하면 호출 부분의 catch()가 발동 안됨.
-        throw Error(result) 
+        // throw Error(result) 
+        throw result.response
     })
+}
+
+export const setAuthInHeader = token => {
+    axios.defaults.headers.common['Authorization'] = token ? `Bearer ${token}` : null
 }
 
 export const board = {
@@ -36,4 +43,15 @@ export const board = {
     fetch() {
         return request('get', '/boards')
     }
+}
+
+export const auth = {
+    login(email, password) {
+        return request('post', '/login', {email, password})
+    }
+}
+
+const {token} = localStorage // const token = localStorage.token?
+if (token) {
+    setAuthInHeader(token)
 }

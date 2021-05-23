@@ -67,8 +67,9 @@ export default {
       // axios 모듈화 한 부분에서 catch 로직 처리를 해두어서 override 할 필요가 없었다
       board.fetch()
         .then(data => {
-          console.log('/boards 성공 data =', data)
+          // console.log('/boards 성공 data =', data)
           this.boards = data
+          this.apiRes = data
         })
         .catch(res => {
           console.log('Home error res =', res)
