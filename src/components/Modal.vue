@@ -36,7 +36,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .modal-mask {
   position: fixed;
   z-index: 9998;
@@ -48,12 +48,10 @@ export default {
   display: table;
   transition: opacity .3s ease;
 }
-
 .modal-wrapper {
   display: table-cell;
   vertical-align: middle;
 }
-
 .modal-container {
   width: 300px;
   margin: 0px auto;
@@ -64,20 +62,18 @@ export default {
   transition: all .3s ease;
   font-family: Helvetica, Arial, sans-serif;
 }
-
 .modal-header h3 {
   margin-top: 0;
   color: #42b983;
 }
-
 .modal-body {
   margin: 20px 0;
 }
-
 .modal-default-button {
   float: right;
+  text-decoration: none;
+  color: #999;
 }
-
 /*
  * The following styles are auto-applied to elements with
  * transition="modal" when their visibility is toggled
@@ -86,15 +82,12 @@ export default {
  * You can easily play with the modal transition by editing
  * these styles.
  */
-
 .modal-enter {
   opacity: 0;
 }
-
 .modal-leave-active {
   opacity: 0;
 }
-
 .modal-enter .modal-container,
 .modal-leave-active .modal-container {
   -webkit-transform: scale(1.1);

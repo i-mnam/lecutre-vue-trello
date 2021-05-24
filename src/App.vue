@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Navbar />
-    <router-view></router-view>
+    <router-view class="container"></router-view>
   </div>
 </template>
 
@@ -19,8 +19,7 @@ export default {
   }
 }
 </script>
-<style scoped>
-
+<style>
 html, body, #app {
   height: 100%;
   margin: 0px;

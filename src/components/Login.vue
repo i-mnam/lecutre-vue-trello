@@ -63,6 +63,7 @@ export default {
   },
 }
 </script>
+
 <style>
 .login {
   width: 400px;
@@ -71,4 +72,5 @@ export default {
 .error {
   color: #f00;
 }
+
 </style>

@@ -22,10 +22,6 @@ export default {
       //     return !!localStorage.getItem('token')
       // }
       ...mapGetters(['isAuth']),
-      
-      aa() {
-        console.log('호출 template가 없으면 사용 안해', this.isAuth)
-      },
     },
     methods: {
       // 언제 mutaition인지, action인지 헷갈린다. 주의!!!

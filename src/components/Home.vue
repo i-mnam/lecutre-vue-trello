@@ -97,7 +97,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .home-title {
   padding: 10px;
   font-size: 18px;
@@ -125,7 +125,7 @@ export default {
 }
 .board-item a:hover,
 .board-item a:focus {
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(0,0,0, .1);
   color: #666;
 }
 .board-item-title {

@@ -12,14 +12,12 @@ const mutations = {
             return
         }
         state.token = token
-        console.log('mutations LOGIN state.token 변경', state.token)
         localStorage.setItem('token', token)
         // api.setAuthInHeader(token)
         setAuthInHeader(token)
     },
     LOGOUT(state) {
         state.token = null
-        console.log('mutations LOGOUT state.token 변경', state.token)
         delete localStorage.token
         // api.setAuthInHeader(null)
         setAuthInHeader(null)

@@ -22,9 +22,10 @@ const actions = {
             })
     },
     FETCH_BOARD({commit}, {id}) {
-        return api.board.fetch(id).then(data => {
-            commit('SET_BOARD', data.item)
-        })
+        return api.board.fetch(id)
+            .then(data => {
+                commit('SET_BOARD', data.item)
+            })
     }
 }
 
