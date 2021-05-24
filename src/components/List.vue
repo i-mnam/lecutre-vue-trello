@@ -3,9 +3,11 @@
     <div class="list-header">
       <div class="list-header-title">{{data.title}}</div>
     </div>
-    
+    <div class="card-list">
+      <CardItem v-for="card in data.cards" :key="card.id" :data="card" />
+    </div>
     <div v-if="isAddCard">
-      <AddCard @close="isAddCard=false" />
+      <AddCard :list-id="data.id" @close="isAddCard=false" />
     </div>
     <div v-else>
       <!-- 주의!! event bubbling & 전파 capture/ target(in) / currentTarget(out) / prevent(기본 event 막음) / stop(버블링 막음) -->
@@ -18,9 +20,11 @@
 
 <script>
 import AddCard from './AddCard.vue'
+import CardItem from './CardItem.vue'
+
 export default {
   components: {
-    AddCard,
+    AddCard, CardItem
   },
   props: ['data'],
   data: function() {

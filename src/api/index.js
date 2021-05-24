@@ -49,6 +49,12 @@ export const board = {
     }
 }
 
+export const card = {
+    create(title, listId, pos) {
+        return request('post', '/cards', {title, listId, pos})
+    }
+}
+
 export const auth = {
     login(email, password) {
         return request('post', '/login', {email, password})
