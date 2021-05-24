@@ -8,7 +8,7 @@
       <AddCard @close="isAddCard=false" />
     </div>
     <div v-else>
-      <!-- 주의!! event bubbling / target / currentTarget / prevent / stop -->
+      <!-- 주의!! event bubbling & 전파 capture/ target(in) / currentTarget(out) / prevent(기본 event 막음) / stop(버블링 막음) -->
       <a class="add-card-btn" href="" @click.prevent.stop="isAddCard=true">
         &plus; Add a card..
       </a>
