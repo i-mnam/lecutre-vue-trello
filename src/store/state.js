@@ -2,7 +2,7 @@ const state = {
     token: null,
     isAddBoard: false,
     boards: [],
-    board: {},
+    board: {}, // selected board info
 }
 
 export default state

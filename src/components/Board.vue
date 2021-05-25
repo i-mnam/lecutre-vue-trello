@@ -14,6 +14,8 @@
         </div>
       </div>
     </div>
+    <!--중첩 compo는 바깥의 컴포에 출력이 된다 (e.g. Card 가 Board에 포함되어 나옴( router-view 태그 안에서 나옴) -->
+    <router-view></router-view>
   </div>
 <!-- 
 Q) router-link에서 prop(속성) to와 :to 의 차이가 궁금
