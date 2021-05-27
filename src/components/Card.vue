@@ -1,40 +1,58 @@
 <template>
-    <!-- <div> -->
-  <Modal>
-    Card
-    <div v-if="loading">loading card...</div>
-    <div v-else><div>cid: {{ cid }}</div></div>
-  <!-- </div> -->
+  <!-- <Modal>
+    <div slot="body">
+      {{ card }}
+    </div>
+  </Modal> -->
+  <Modal class="modal-card">
+    <div slot="header" class="modal-card-header">
+      <div class="modal-card-header-title">
+        <input class="form-control" type="text" :value="card.title" readonly>
+      </div>
+      <a class="modal-close-btn" href="" @click.prevent="onClose">&times;</a>
+    </div>
+    <div slot="body">
+      <textarea  class="form-control" cols="30" rows="3" placeholder="Add a more detailed description..." readonly
+        v-model="card.description"></textarea>
+    </div>
+    <div slot="footer"></div>
   </Modal>
 </template>
 <script>
-import Modal from './Modal.vue'
+import Modal from "./Modal.vue";
+import { mapActions, mapState } from "vuex";
 
 export default {
   components: {
     Modal,
   },
-  data() {
-    return {
-      cid: 0,
-      loading: true,
-    };
+  computed: {
+    ...mapState({
+      card: "card", // 'card'라는 상태값을 가져와 card라고 함
+      board: "board",
+    }),
   },
-  watch: {
-      // route의 변경을 감시하는 중
-    //   $route() {
-    //       this.cid = this.$route.params.cid
-    //   },
-      // $route() 함수가 아닌 객체로 설정 가능
-      // 라우터 변경에 따라 변경 감지하는 부분을 배워봄
-      $route : {
-        handler: 'fetchData',
-        immediate: true, // created() 와 같은 역할 이므로 craeted() 삭제함
-      },
-  }, 
-//   created() {
-//       this.fetchData()
-//   },
+  // data() {
+  //   return {
+  //     cid: 0,
+  //     loading: true,
+  //   };
+  // },
+  // watch: {
+  //   // route의 변경을 감시하는 중
+  //   //   $route() {
+  //   //       this.cid = this.$route.params.cid
+  //   //   },
+  //     // $route() 함수가 아닌 객체로 설정 가능
+  //     // 라우터 변경에 따라 변경 감지하는 부분을 배워봄
+  //     $route : {
+  //       handler: 'fetchData',
+  //       immediate: true, // created() 와 같은 역할 이므로 craeted() 삭제함
+  //     },
+  // },
+  //   created() {
+  //       this.fetchData()
+  //   },
   /**
   computed() 속성 : 종속 대상을 따라 저장(캐싱)된다. 
   즉, 해당 속성이 종속된 대상이 변경될 때만 함수를 실행함.
@@ -51,15 +69,44 @@ export default {
 
   this.cid = this.$route.params.cid << 의 호출 시점이 속성에 따라 다르다~~
   * */
-
+  created: function () {
+    const id = this.$route.params.cid;
+    this.FETCH_CARD({ id });
+  },
   methods: {
-    fetchData() {
-        this.loading = true
-        setTimeout(() => {
-        this.loading = false
-        this.cid = this.$route.params.cid;
-        }, 500)
+    // fetchData() {
+    //     this.loading = true
+    //     setTimeout(() => {
+    //     this.loading = false
+    //     this.cid = this.$route.params.cid;
+    //     }, 500)
+    // }
+    ...mapActions(["FETCH_CARD"]),
+    onClose() {
+      console.log("onClose")
+      this.$router.push(`/b/${this.board.id}`)
     }
-  }
-}
+  },
+};
 </script>
+
+<style>
+.modal-card .modal-container {
+  min-width: 300px;
+  max-width: 800px;
+  width: 60%;
+}
+.modal-card-header-title {
+  padding-right: 30px;  
+}
+.modal-close-btn {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  font-size: 24px;
+  text-decoration: none;
+}
+.modal-card-header {
+  position: relative;
+}
+</style>

@@ -3,6 +3,7 @@ const state = {
     isAddBoard: false,
     boards: [],
     board: {}, // selected board info
+    card: {},
 }
 
 export default state

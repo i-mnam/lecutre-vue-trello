@@ -50,9 +50,12 @@ export const board = {
 }
 
 export const card = {
+    fetch(id) {
+        return request('get', `/cards/${id}`)
+    },
     create(title, listId, pos) {
         return request('post', '/cards', {title, listId, pos})
-    }
+    },
 }
 
 export const auth = {

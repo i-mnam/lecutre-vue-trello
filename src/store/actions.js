@@ -33,6 +33,12 @@ const actions = {
             .then(_ => {
                 dispatch('FETCH_BOARD', {id: state.board.id})
             })
+    },
+    FETCH_CARD(ctx, {id}) {// ctx >> {commit}
+        return api.card.fetch(id)
+            .then(data => {
+                ctx.commit('SET_CARD', data.item)
+            })
     }
 }
 
