@@ -7,12 +7,15 @@
   <Modal class="modal-card">
     <div slot="header" class="modal-card-header">
       <div class="modal-card-header-title">
-        <input class="form-control" type="text" :value="card.title" readonly>
+        <!-- readonly 바인드/bind-->
+        <input class="form-control" type="text" :value="card.title" 
+          :readonly="!toggleTitle" @click="toggleTitle=true" @blur="onBlurTitle" ref="inputTitle">
       </div>
       <a class="modal-close-btn" href="" @click.prevent="onClose">&times;</a>
     </div>
     <div slot="body">
-      <textarea  class="form-control" cols="30" rows="3" placeholder="Add a more detailed description..." readonly
+      <textarea  class="form-control" cols="30" rows="3" placeholder="Add a more detailed description..." 
+      :readonly="!toggleDesc" @click="toggleDesc=true" @blur="onBlurDesc" ref="inputDesc"
         v-model="card.description"></textarea>
     </div>
     <div slot="footer"></div>
@@ -26,11 +29,61 @@ export default {
   components: {
     Modal,
   },
+  data: function() {
+    return {
+      toggleTitle: false, 
+      toggleDesc: false,
+    }
+  },
   computed: {
     ...mapState({
       card: "card", // 'card'라는 상태값을 가져와 card라고 함
       board: "board",
     }),
+  },
+  created: function () {
+    // const id = this.$route.params.cid;
+    // this.FETCH_CARD({ id });
+    this.fetchCard()
+  },
+  methods: {
+    // fetchData() {
+    //     this.loading = true
+    //     setTimeout(() => {
+    //     this.loading = false
+    //     this.cid = this.$route.params.cid;
+    //     }, 500)
+    // }
+    ...mapActions(["FETCH_CARD", 'UPDATE_CARD']),
+    fetchCard() {
+      const id = this.$route.params.cid
+      this.FETCH_CARD({ id })
+    },
+    onClose() {
+      console.log("onClose")
+      this.$router.push(`/b/${this.board.id}`)
+    },
+    onBlurTitle() {
+      this.toggleTitle = false
+      const title = this.$refs.inputTitle.value.trim()
+      if(!title) {
+        console.log('title 없음')
+        return
+      }
+
+      this.UPDATE_CARD({id: this.card.id, title})
+        .then(() => this.fetchCard())
+    },
+    onBlurDesc() {
+      this.toggleDesc = false
+      const description = this.$refs.inputDesc.value.trim()
+      if(!description) {
+        console.log('description none.')
+        return
+      }
+      this.UPDATE_CARD({id: this.card.id, description})
+        .then(() => this.fetchCard())
+    }
   },
   // data() {
   //   return {
@@ -69,24 +122,6 @@ export default {
 
   this.cid = this.$route.params.cid << 의 호출 시점이 속성에 따라 다르다~~
   * */
-  created: function () {
-    const id = this.$route.params.cid;
-    this.FETCH_CARD({ id });
-  },
-  methods: {
-    // fetchData() {
-    //     this.loading = true
-    //     setTimeout(() => {
-    //     this.loading = false
-    //     this.cid = this.$route.params.cid;
-    //     }, 500)
-    // }
-    ...mapActions(["FETCH_CARD"]),
-    onClose() {
-      console.log("onClose")
-      this.$router.push(`/b/${this.board.id}`)
-    }
-  },
 };
 </script>
 
