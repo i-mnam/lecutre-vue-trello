@@ -24,8 +24,10 @@ to="/b/1" 으로 선언했을때는 링크가 /b/1으로만 설정되는 반면�
 :to=/b/${bid}/c/1 로 선언하게되면 bid 변수 값에 따라 링크가 동적으로 변하는 것 -->
 </template>
 <script>
-import {mapState, mapActions} from 'vuex'
+import {mapState, mapMutations,  mapActions} from 'vuex'
 import List from './List.vue'
+import dragula from 'dragula'
+import 'dragula/dist/dragula.css'
 
 export default {
   components: {
@@ -35,11 +37,13 @@ export default {
     return {
       bid: 0,
       loading: true,
+      dragulaCards: null,
     }
   },
   computed: {
     ...mapState(['board']),
   },
+  //, 'card'
   // Board가 생성될 때, 실행되는 훅 : created() 훅
   // 원래 vue instance에는 this.$route 라는 객체가 잇음
   // 이를 통해 라우팅 정보를 알 수 있는 것임
@@ -48,8 +52,84 @@ export default {
   created() {
     this.fetchData()
   },
+  // 자식 component가 모두 마운트 되는 시점: updated
+  updated: function() {
+    if(this.dragulaCards) {
+      console.log('dragulaCards 있음')
+      this.dragulaCards.destroy()
+    }
+    
+
+    // dragula(containers?, options?)
+    this.dragulaCards = dragula([
+      // this.$el.querySelectorAll('.card-list') >> 유사배열이기 때문에 Array.from() 형태로 만들어 줘야함 헐?!!
+      ...Array.from(this.$el.querySelectorAll('.card-list'))
+    ]).on('drop', (el, wrapper, target, sibling) => {
+      console.log('el=', el, ' target=', target, ' sibling=', sibling, ' wrapper=', wrapper) // $el은 undefined
+      
+      const targetCard = {
+        id: el.dataset.cardId * 1, 
+        pos: 65535,
+      }
+      let prevCard = null
+      let nextCard = null
+      Array.from(wrapper.querySelectorAll('.card-item'))
+        .forEach((el, idx, arr) => {
+          const cardId = el.dataset.cardId * 1
+          if (targetCard.id === cardId) {
+            prevCard = idx > 0 ? {
+              id: arr[idx - 1].dataset.cardId * 1,
+              pos: arr[idx - 1].dataset.cardPos * 1,
+            } : null
+            nextCard = idx < arr.length - 1 ? {
+              id: arr[idx + 1].dataset.cardId * 1,
+              pos: arr[idx + 1].dataset.cardPos * 1,
+            } : null
+          }
+        })
+      if (!prevCard && nextCard) targetCard.pos = nextCard.pos / 2
+      else if (!nextCard && prevCard) targetCard.pos = prevCard.pos * 2
+      else if (nextCard && prevCard) targetCard.pos = (prevCard.pos + nextCard.pos) / 2
+      this.UPDATE_CARD(targetCard)
+
+
+/*
+
+      if (wrapper.className != 'card-list') {
+        alert('ERROR!!!', wrapper.className)
+        console.log('강제 실행 중지')
+        return
+      }
+
+      // console.log('el.dataset.listId=', el.dataset.listId)
+      //temp
+      // let listIndex = el.dataset.listId
+      let tempObj = {}
+      // this.board.lists[listIndex-1].cards.forEach((el, idx, arr) => {
+      //   let id = el.id
+      //   tempObj[id] = el
+      // })
+
+      tempObj = 
+
+      console.log('temp =', tempObj)
+      // this.board.lists[0].cards
+      let tempList =[]
+      Array.from(wrapper.children).forEach((el, idx, arr) => {
+        tempObj[el.dataset.cardId].pos = idx
+        tempList.push(tempObj[el.dataset.cardId])
+      })
+      console.log('before board.list =', this.board.lists, '/ tempList = ', tempList)
+      // this.SET_BOARD(tempList)
+      // this.board.lists[0].
+      this.UPDATE_CARD(tempObj[el.dataset.cardId])
+ */
+    })
+
+  },
   methods: {
-    ...mapActions(['FETCH_BOARD']),
+    ...mapActions(['FETCH_BOARD', 'FETCH_CARD', 'UPDATE_CARD']),
+    ...mapMutations(['SET_BOARD']),
     fetchData() {
       this.loading = true
 

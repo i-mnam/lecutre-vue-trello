@@ -37,6 +37,7 @@ const actions = {
     FETCH_CARD(ctx, {id}) {// ctx >> {commit}
         return api.card.fetch(id)
             .then(data => {
+                console.log('FETCH_CARD=', data.item)
                 ctx.commit('SET_CARD', data.item)
             })
     },
