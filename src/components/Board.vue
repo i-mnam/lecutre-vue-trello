@@ -26,8 +26,9 @@ to="/b/1" 으로 선언했을때는 링크가 /b/1으로만 설정되는 반면�
 <script>
 import {mapState, mapMutations,  mapActions} from 'vuex'
 import List from './List.vue'
-import dragula from 'dragula'
-import 'dragula/dist/dragula.css'
+// import dragula from 'dragula'
+// import 'dragula/dist/dragula.css'
+import dragger from '../utils/dragger'
 
 export default {
   components: {
@@ -37,7 +38,8 @@ export default {
     return {
       bid: 0,
       loading: true,
-      dragulaCards: null,
+      // dragulaCards: null,
+      cDragger: null,
     }
   },
   computed: {
@@ -52,14 +54,15 @@ export default {
   created() {
     this.fetchData()
   },
-  // 자식 component가 모두 마운트 되는 시점: updated
+  // 자식 component가 모두 rendering/마운트 되는 시점: updated
   updated: function() {
-    if(this.dragulaCards) {
-      console.log('dragulaCards 있음')
-      this.dragulaCards.destroy()
-    }
+    // if(this.dragulaCards) {
+    //   console.log('dragulaCards 있음')
+    //   this.dragulaCards.destroy()
+    // }
+    this.setCardDragabble()
     
-
+/**
     // dragula(containers?, options?)
     this.dragulaCards = dragula([
       // this.$el.querySelectorAll('.card-list') >> 유사배열이기 때문에 Array.from() 형태로 만들어 줘야함 헐?!!
@@ -71,8 +74,10 @@ export default {
         id: el.dataset.cardId * 1, 
         pos: 65535,
       }
+
       let prevCard = null
       let nextCard = null
+      
       Array.from(wrapper.querySelectorAll('.card-item'))
         .forEach((el, idx, arr) => {
           const cardId = el.dataset.cardId * 1
@@ -90,8 +95,10 @@ export default {
       if (!prevCard && nextCard) targetCard.pos = nextCard.pos / 2
       else if (!nextCard && prevCard) targetCard.pos = prevCard.pos * 2
       else if (nextCard && prevCard) targetCard.pos = (prevCard.pos + nextCard.pos) / 2
-      this.UPDATE_CARD(targetCard)
 
+      console.log(targetCard)
+      this.UPDATE_CARD(targetCard)
+ */
 
 /*
 
@@ -124,7 +131,8 @@ export default {
       // this.board.lists[0].
       this.UPDATE_CARD(tempObj[el.dataset.cardId])
  */
-    })
+
+    // })
 
   },
   methods: {
@@ -142,6 +150,54 @@ export default {
       //   this.loading = false
       // }, 500)
     },
+    setCardDragabble() {
+
+      if(this.cDragger) {
+        this.cDragger.destroy()
+      }
+
+      this.cDragger = dragger.init(Array.from(this.$el.querySelectorAll('.card-list')))
+
+      this.cDragger.on('drop', (el, wrapper, target, sibling) => {
+        console.log('el=', el, ' target=', target, ' sibling=', sibling, ' wrapper=', wrapper) // $el은 undefined
+        
+        const targetCard = {
+          id: el.dataset.cardId * 1, 
+          pos: 65535,
+        }
+
+        const {prev, next} = dragger.sibling({
+          el,
+          wrapper,
+          candidates: Array.from(wrapper.querySelectorAll('.card-item')),
+          type: 'card'
+        })
+
+        // let prevCard = null
+        // let nextCard = null
+        
+        // Array.from(wrapper.querySelectorAll('.card-item'))
+        //   .forEach((el, idx, arr) => {
+        //     const cardId = el.dataset.cardId * 1
+        //     if (targetCard.id === cardId) {
+        //       prevCard = idx > 0 ? {
+        //         id: arr[idx - 1].dataset.cardId * 1,
+        //         pos: arr[idx - 1].dataset.cardPos * 1,
+        //       } : null
+        //       nextCard = idx < arr.length - 1 ? {
+        //         id: arr[idx + 1].dataset.cardId * 1,
+        //         pos: arr[idx + 1].dataset.cardPos * 1,
+        //       } : null
+        //     }
+        //   })
+        if (!prev && next) targetCard.pos = next.pos / 2
+        else if (!next && prev) targetCard.pos = prev.pos * 2
+        else if (next && prev) targetCard.pos = (prev.pos + next.pos) / 2
+
+        console.log(targetCard)
+        this.UPDATE_CARD(targetCard)
+      })
+    }
   }
 }
 </script>
