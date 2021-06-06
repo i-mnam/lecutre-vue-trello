@@ -3,7 +3,9 @@
     <div class="board-wrapper">
       <div class="board">
         <div class="board-header">
-          <span class="board-title">{{board.title}}</span>
+          <input class="form-control" v-if="isEditTitle" type="text" v-model="inputTitle"
+           ref="inputTitle" @blur="onSubmitTitle" @keyup.enter="onSubmitTitle">
+          <span v-else class="board-title" @click.prevent="onClickTitle">{{board.title}}</span>
           <a class="board-header-btn show-menu" href="" @click.prevent="onShowSettings">... Show Menu</a>
         </div>
         <div class="list-section-wrapper">
@@ -45,6 +47,8 @@ export default {
       loading: true,
       // dragulaCards: null,
       cDragger: null,
+      isEditTitle: false,
+      inputTitle: '',
     }
   },
   computed: {
@@ -59,6 +63,7 @@ export default {
   created() {
     // this.fetchData() //then() 를 사용하기 위해 promise를 반환 받아야 한다.
     this.fetchData().then(() => {
+      this.inputTitle = this.board.title
       this.SET_THEME(this.board.bgColor)
     })
     this.SET_IS_SHOW_BOARD_SETTINGS(false)
@@ -145,10 +150,9 @@ export default {
 
   },
   methods: {
-    ...mapActions(['FETCH_BOARD', 'FETCH_CARD', 'UPDATE_CARD']),
+    ...mapActions(['FETCH_BOARD', 'FETCH_CARD', 'UPDATE_CARD', 'UPDATE_BOARD']),
     ...mapMutations(['SET_BOARD', 'SET_THEME', 'SET_IS_SHOW_BOARD_SETTINGS']),
     fetchData() {
-      console.log('here??')
       this.loading = true
 
       // return 이 없어도 되던 로직이지만 created에서 확장 사용하게 되어 return 사용함
@@ -214,6 +218,23 @@ export default {
     },
     onShowSettings() {
       this.SET_IS_SHOW_BOARD_SETTINGS(true)
+    },
+    onClickTitle() {
+      this.isEditTitle = true
+      // this.$refs.inputTitle.focus()
+      this.$nextTick(() => this.$refs.inputTitle.focus())
+    },
+    onSubmitTitle() {
+      this.isEditTitle = false
+
+      this.inputTitle = this.inputTitle.trim()
+      if (!this.inputTitle) return
+
+      const id = this.board.id
+      const title = this. inputTitle
+      if (title === this.board.title) return
+
+      this.UPDATE_BOARD({id, title})
     }
   }
 }
