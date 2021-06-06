@@ -11,8 +11,11 @@
         <div class="list-section-wrapper">
           <div class="list-section">
             <div class="list-wrapper" v-for="list in board.lists" :key="list.pos">
-                <List :data="list" />
-              </div>
+              <List :data="list" />
+            </div>
+            <div class="list-wrapper">
+              <AddList />
+            </div>
           </div>
         </div>
       </div>
@@ -30,6 +33,7 @@ to="/b/1" 으로 선언했을때는 링크가 /b/1으로만 설정되는 반면�
 <script>
 import {mapState, mapMutations,  mapActions} from 'vuex'
 import List from './List.vue'
+import AddList from './AddList.vue'
 import BoardSettings from './BoardSettings.vue'
 // import dragula from 'dragula'
 // import 'dragula/dist/dragula.css'
@@ -39,6 +43,7 @@ import dragger from '../utils/dragger'
 export default {
   components: {
     List,
+    AddList,
     BoardSettings,
   },
   data() {

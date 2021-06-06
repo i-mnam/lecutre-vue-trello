@@ -37,6 +37,10 @@ const actions = {
         // 강사님은 state에서 board.id를 가져옴
         // .then(() => ctx.dispatch('FETCH_BOARD'), {id: state.board.id})
     },
+    ADD_LIST(ctx, {title, boardId, pos}) {
+        return api.list.create({title, boardId, pos})
+            .then(_ => ctx.dispatch('FETCH_BOARD', {id: ctx.state.board.id}))
+    },
     ADD_CARD({dispatch, state}, {title, listId, pos}) {
         return api.card.create(title, listId, pos)
             .then(_ => {
