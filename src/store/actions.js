@@ -37,13 +37,16 @@ const actions = {
     FETCH_CARD(ctx, {id}) {// ctx >> {commit}
         return api.card.fetch(id)
             .then(data => {
-                console.log('FETCH_CARD=', data.item)
                 ctx.commit('SET_CARD', data.item)
             })
     },
     UPDATE_CARD(ctx, {id, title, description, pos, listId}) {
         // update 후 수정된 데이터를 보여줘야 함
         return api.card.update(id, {title, description, pos, listId})
+            .then(_ => ctx.dispatch('FETCH_BOARD', {id: ctx.state.board.id}))
+    },
+    DELETE_CARD(ctx, {id}) {
+        return api.card.destroy(id)
             .then(_ => ctx.dispatch('FETCH_BOARD', {id: ctx.state.board.id}))
     }
 }

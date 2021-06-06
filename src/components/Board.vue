@@ -159,7 +159,7 @@ export default {
       this.cDragger = dragger.init(Array.from(this.$el.querySelectorAll('.card-list')))
 
       this.cDragger.on('drop', (el, wrapper, target, sibling) => {
-        console.log('el=', el, ' target=', target, ' sibling=', sibling, ' wrapper=', wrapper) // $el은 undefined
+        // console.log('el=', el, ' target=', target, ' sibling=', sibling, ' wrapper=', wrapper) // $el은 undefined
         
         const targetCard = {
           id: el.dataset.cardId * 1, 
@@ -194,7 +194,7 @@ export default {
         else if (!next && prev) targetCard.pos = prev.pos * 2
         else if (next && prev) targetCard.pos = (prev.pos + next.pos) / 2
 
-        console.log(targetCard)
+        // console.log(targetCard)
         this.UPDATE_CARD(targetCard)
       })
     }

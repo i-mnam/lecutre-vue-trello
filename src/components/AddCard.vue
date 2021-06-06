@@ -46,7 +46,7 @@ export default {
     },
     setupClickOutside(el) {
       document.querySelector('body').addEventListener('click', e => {
-        console.log('e.target =', e.target)
+        // console.log('e.target =', e.target)
         if(el.contains(e.target)) {
           console.log('setupClickOutside() this.$el.contains(e.target)', el.contains(e.target))// 해당 ele를 포함하는지
           return

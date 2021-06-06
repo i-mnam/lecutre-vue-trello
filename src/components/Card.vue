@@ -54,13 +54,14 @@ export default {
     //     this.cid = this.$route.params.cid;
     //     }, 500)
     // }
-    ...mapActions(["FETCH_CARD", 'UPDATE_CARD']),
+    ...mapActions(["FETCH_CARD", 'UPDATE_CARD', 'FETCH_BOARD']),
     fetchCard() {
       const id = this.$route.params.cid
       this.FETCH_CARD({ id })
     },
     onClose() {
-      console.log("onClose")
+      // 왜 fetch api 가 아니라 router로 ?!!
+      // this.FETCH_BOARD({id: this.board.id})
       this.$router.push(`/b/${this.board.id}`)
     },
     onBlurTitle() {
