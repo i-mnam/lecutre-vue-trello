@@ -31,6 +31,12 @@ const actions = {
     DELETE_BOARD(_, {id}) {
         return api.board.destroy(id)
     },
+    UPDATE_BOARD(ctx, {id, title, bgColor}) {
+        return api.board.update(id, {title, bgColor})
+            .then(() => ctx.dispatch('FETCH_BOARD', {id: id}))
+        // 강사님은 state에서 board.id를 가져옴
+        // .then(() => ctx.dispatch('FETCH_BOARD'), {id: state.board.id})
+    },
     ADD_CARD({dispatch, state}, {title, listId, pos}) {
         return api.card.create(title, listId, pos)
             .then(_ => {
