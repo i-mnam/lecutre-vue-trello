@@ -4,6 +4,7 @@
       <div class="board">
         <div class="board-header">
           <span class="board-title">{{board.title}}</span>
+          <a class="board-header-btn show-menu" href="" @click.prevent="onShowSettings">... Show Menu</a>
         </div>
         <div class="list-section-wrapper">
           <div class="list-section">
@@ -14,6 +15,7 @@
         </div>
       </div>
     </div>
+    <BoardSettings v-if="isShowBoardSettings" />
     <!--중첩 compo는 바깥의 컴포에 출력이 된다 (e.g. Card 가 Board에 포함되어 나옴( router-view 태그 안에서 나옴) -->
     <router-view></router-view>
   </div>
@@ -26,13 +28,16 @@ to="/b/1" 으로 선언했을때는 링크가 /b/1으로만 설정되는 반면�
 <script>
 import {mapState, mapMutations,  mapActions} from 'vuex'
 import List from './List.vue'
+import BoardSettings from './BoardSettings.vue'
 // import dragula from 'dragula'
 // import 'dragula/dist/dragula.css'
 import dragger from '../utils/dragger'
 
+
 export default {
   components: {
-    List 
+    List,
+    BoardSettings,
   },
   data() {
     return {
@@ -43,7 +48,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['board']),
+    ...mapState(['board', 'isShowBoardSettings']),
   },
   //, 'card'
   // Board가 생성될 때, 실행되는 훅 : created() 훅
@@ -56,6 +61,7 @@ export default {
     this.fetchData().then(() => {
       this.SET_THEME(this.board.bgColor)
     })
+    this.SET_IS_SHOW_BOARD_SETTINGS(false)
   },
   // 자식 component가 모두 rendering/마운트 되는 시점: updated
   updated: function() {
@@ -140,7 +146,7 @@ export default {
   },
   methods: {
     ...mapActions(['FETCH_BOARD', 'FETCH_CARD', 'UPDATE_CARD']),
-    ...mapMutations(['SET_BOARD', 'SET_THEME']),
+    ...mapMutations(['SET_BOARD', 'SET_THEME', 'SET_IS_SHOW_BOARD_SETTINGS']),
     fetchData() {
       this.loading = true
 
@@ -201,6 +207,9 @@ export default {
         // console.log(targetCard)
         this.UPDATE_CARD(targetCard)
       })
+    },
+    onShowSettings() {
+      this.SET_IS_SHOW_BOARD_SETTINGS(true)
     }
   }
 }
