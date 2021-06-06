@@ -52,7 +52,10 @@ export default {
   // 이렇게 this.$route 를 사용할 수 있는 이유: 라우터를 설정할 때,
   // Vue.use(VueRouter) << 미들웨어처럼 추가 했으므로 this.$route 정보가 있는 것임.
   created() {
-    this.fetchData()
+    // this.fetchData() //then() 를 사용하기 위해 promise를 반환 받아야 한다.
+    this.fetchData().then(() => {
+      this.SET_THEME(this.board.bgColor)
+    })
   },
   // 자식 component가 모두 rendering/마운트 되는 시점: updated
   updated: function() {
@@ -137,11 +140,12 @@ export default {
   },
   methods: {
     ...mapActions(['FETCH_BOARD', 'FETCH_CARD', 'UPDATE_CARD']),
-    ...mapMutations(['SET_BOARD']),
+    ...mapMutations(['SET_BOARD', 'SET_THEME']),
     fetchData() {
       this.loading = true
 
-      this.FETCH_BOARD({id: this.$route.params.bid})
+      // return 이 없어도 되던 로직이지만 created에서 확장 사용하게 되어 return 사용함
+      return this.FETCH_BOARD({id: this.$route.params.bid})
         .then(() => { 
           this.loading = false
         })

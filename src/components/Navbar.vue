@@ -12,7 +12,7 @@
 
 <script>
 // import { setAuthInHeader } from '../api'
-import {mapGetters, mapMutations} from 'vuex'
+import {mapState, mapGetters, mapMutations} from 'vuex'
 
 export default {
     computed: {
@@ -21,7 +21,16 @@ export default {
       //     // js값을 불리언 타입으로 변경할때 많이 사용 / 비슷 Boolean()
       //     return !!localStorage.getItem('token')
       // }
+      ...mapState(['navbarColor', 'bodyColor']),
       ...mapGetters(['isAuth']),
+    },
+    // state값이 변경되었을 때 method를 실행시켜줄 watch
+    watch: {
+      'bodyColor': 'updateTheme', 
+      // state의 bodyColor가 변경이 감지되면, updateTheme()를 실행시켜줌
+    },
+    mounted() {
+      this.updateTheme()
     },
     methods: {
       // 언제 mutaition인지, action인지 헷갈린다. 주의!!!
@@ -31,6 +40,21 @@ export default {
           // setAuthInHeader(null)
           this.LOGOUT()
           this.$router.push('/login')
+      },
+      updateTheme() {
+        // this.$el //Navbar element
+        this.$el.style.backgroundColor = this.navbarColor
+        
+        const body = document.querySelector('body')
+        if(!body) {
+          return
+        }
+        body.style.backgroundColor = this.bodyColor
+          
+        // const container = document.querySelector('.container')
+        // if(container) {
+        //   container.style.backgroundColor = this.bodyColor
+        // }
       }
     }
 }

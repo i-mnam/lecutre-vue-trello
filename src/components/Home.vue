@@ -48,6 +48,7 @@ export default {
   created() {
     // console.log('Vue instance 확인 @Home', this) // VueComponent 객체로 인식하고 있음
     this.fetchData()
+    this.SET_THEME()
   },
   // vue.js의 렌더링 사이클에 의해서 updated()는 매번 호출 됨.
   // created() 다음에 호출이 됨
@@ -63,7 +64,7 @@ export default {
   },
   methods: {
     // 동기적인 코드만 변이 가능하므로, 상태 변경 데이터 변경과 같은 것 위주
-    ...mapMutations(['SET_IS_ADD_BOARD']),
+    ...mapMutations(['SET_IS_ADD_BOARD', 'SET_THEME']),
     ...mapActions(['FETCH_BOARDS']),
     fetchData() {
       this.loading = true
