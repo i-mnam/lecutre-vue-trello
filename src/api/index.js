@@ -3,6 +3,7 @@ import router from '../router'
 
 const DOMAIN = 'http://localhost:3000'
 const UNAUTHORIZED = 401
+const NOTFOUND = 404
 const onUnauthorized = () => {
     // router.push() : 경로 이동
     // router.push({ name: 'user', params: { userId: 123 }})
@@ -13,6 +14,9 @@ const onUnauthorized = () => {
     // .catch(err=>{console.log('onUnauthorized() err(NavigationDuplicated: Avoided redundant navigation to current location: "/login".)...', err)})
     router.push(`/login?rPath=${encodeURIComponent(location.pathname)}`)
 
+}
+const onNotFond = () => {
+    router.push('/')
 }
 
 // api 호출 부분 모듈화
@@ -27,6 +31,8 @@ const request = (method, url, data) => {
         const {status} = result.response
         if (status === UNAUTHORIZED) {
             onUnauthorized()
+        } else if (status === NOTFOUND) {
+            onNotFond()
         }
         // throw Error() 중요!! throw 안하면 호출 부분의 catch()가 발동 안됨.
         // throw Error(result) 
@@ -46,6 +52,9 @@ export const board = {
     },
     create(title) {
         return request('post', '/boards', { title })
+    },
+    destroy(id) {
+        return request('delete', `/boards/${id}`)
     }
 }
 

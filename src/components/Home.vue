@@ -74,7 +74,7 @@ export default {
       //     this.boards = data.list
       //   })
       //   .catch(res => {
-      //     console.log('Home error res =', res)
+          console.log('Home error res =')
       //   })
       //   .finally(_ => {
       //     this.loading = false
@@ -82,6 +82,13 @@ export default {
       this.FETCH_BOARDS().finally(_ => {
         this.loading = false
       })
+      // this.FETCH_BOARDS()
+      //   .catch(res => {
+      //     console.log('home error res = ', res)
+      //   })
+      //   .finally(_ => {
+      //   this.loading = false
+      // })
     },
     // **store의 mapMutations 변경
     // addBoard() {

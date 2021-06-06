@@ -148,12 +148,16 @@ export default {
     ...mapActions(['FETCH_BOARD', 'FETCH_CARD', 'UPDATE_CARD']),
     ...mapMutations(['SET_BOARD', 'SET_THEME', 'SET_IS_SHOW_BOARD_SETTINGS']),
     fetchData() {
+      console.log('here??')
       this.loading = true
 
       // return 이 없어도 되던 로직이지만 created에서 확장 사용하게 되어 return 사용함
       return this.FETCH_BOARD({id: this.$route.params.bid})
         .then(() => { 
           this.loading = false
+        })
+        .catch(err => {
+          this.error = err.data.error
         })
       // setTimeout(() => {
       //   this.bid = this.$route.params.bid
